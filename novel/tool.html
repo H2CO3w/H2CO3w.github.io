@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>小说段落转换器</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; display: flex; gap: 20px; }
+        textarea { width: 50%; height: 80vh; padding: 10px; border-radius: 8px; border: 1px solid #ccc; }
+        .output { background: #f4f4f4; padding: 10px; overflow-y: auto; white-space: pre-wrap; flex-grow: 1; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <textarea id="input" placeholder="把你的小说文字贴在这里..."></textarea>
+    <div id="output" class="output" onclick="copyToClipboard()">点击结果即可复制内容...</div>
+
+    <script>
+        const input = document.getElementById('input');
+        const output = document.getElementById('output');
+
+        input.oninput = function() {
+            const text = input.value.trim();
+            if (!text) { output.innerText = ''; return; }
+            
+            // 按换行符分割，过滤掉空行，并加上 <p> 标签
+            const paragraphs = text.split(/\n+/).map(p => `<p>${p.trim()}</p>`);
+            output.innerText = paragraphs.join('\n');
+        };
+
+        function copyToClipboard() {
+            navigator.clipboard.writeText(output.innerText);
+            alert('已复制到剪贴板！');
+        }
+    </script>
+</body>
+</html>
