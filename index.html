@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShiroCyberCastle</title>
+    <style>
+        /* ========== 全局重置 & 变量 ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --blood-deep: #7a1824;
+            --blood: #9b1d2e;
+            --blood-bright: #c0392b;
+            --blood-glow: rgba(177, 37, 56, 0.45);
+            --ash-red: #4b2128;
+            --dark-base: #141c32;
+            --dark-elevated: #0f0f3b;
+            --dark-card: #0f0f2d;
+            --text-dim: #777;
+            --text-mid: #aaa;
+            --text-bright: #e0e0e0;
+            --border-faint: #1c1c1c;
+            --border-active: #3b1f23;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--dark-base);
+            color: var(--text-mid);
+            font-family: 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* ========== 主屏区域 ========== */
+        .hero {
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background: var(--dark-base);
+        }
+
+        /* ========== 社交图标：左下角固定 ========== */
+        .social-bar {
+            position: fixed;
+            bottom: 28px;
+            left: 28px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+        
+        /* ---- 背景装饰层 ---- */
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 70% at 75% 20%,
+                    rgba(187, 36, 59, 0.477) 0%,
+                    rgba(161, 57, 105, 0.231) 40%,
+                    transparent 65%),
+                
+                radial-gradient(ellipse 50% 50% at 25% 75%,
+                    rgba(139, 56, 102, 0.362) 0%,
+                    transparent 70%),
+                
+                radial-gradient(ellipse 100% 40% at 50% 100%,
+                    rgba(32, 9, 56, 0.5) 0%,
+                    transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ---- 纹理叠加 ---- */
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                /* 细微噪点纹理 */
+                repeating-linear-gradient(0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(63, 12, 12, 0.039) 2px,
+                    rgba(93, 14, 14, 0) 4px),
+                /* 细线装饰 —— 画面右上黄金螺旋引导线 */
+                linear-gradient(135deg,
+                    transparent 61.8%,
+                    rgba(124, 103, 19, 0.212) 61.8%,
+                    rgba(113, 80, 13, 0.017) 62%,
+                    transparent 62%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ---- 几何装饰线条 ---- */
+        .hero-geo {
+            position: absolute;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .hero-geo.line-1 {
+            top: 20%;
+            left: 8%;
+            width: 180px;
+            height: 1px;
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(116, 46, 16, 0.232),
+                    rgba(201, 33, 50, 0.227),
+                    transparent);
+            transform: rotate(-8deg);
+        }
+
+        .hero-geo.line-2 {
+            bottom: 28%;
+            right: 6%;
+            width: 140px;
+            height: 1px;
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(196, 184, 22, 0.27),
+                    transparent);
+            transform: rotate(5deg);
+        }
+
+        .hero-geo.circle-1 {
+            top: 22%;
+            right: 18%;
+            width: 120px;
+            height: 120px;
+            border: 1px solid rgba(180, 30, 50, 0.12);
+            border-radius: 50%;
+        }
+
+        .hero-geo.circle-2 {
+            bottom: 32%;
+            left: 14%;
+            width: 80px;
+            height: 80px;
+            border: 1px solid rgba(180, 30, 50, 0.08);
+            border-radius: 50%;
+        }
+
+        /* ---- 头像区：黄金比例螺旋中心 ---- */
+        .avatar-area {
+            position: absolute;
+            top: 38.2%;
+            right: 38.2%;
+            transform: translate(50%, -50%);
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 14px;
+            z-index: 10;
+        }
+
+        .avatar-link {
+            display: block;
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            overflow: hidden;
+            opacity: 0.72;
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: 2px solid rgba(180, 30, 50, 0.3);
+            position: relative;
+        }
+
+        /* 头像外发光环 */
+        .avatar-link::before {
+            content: '';
+            position: absolute;
+            inset: -7.5px;
+            border-radius: 50%;
+            border: 1px solid rgba(180, 30, 105, 0.2);
+            opacity: 0;
+            transition: all 0.5s ease;
+            z-index: -1;
+        }
+
+        .avatar-link:hover {
+            opacity: 1;
+            border-color: var(--blood-bright);
+            box-shadow:
+                0 0 30px var(--blood-glow),
+                0 0 60px rgba(180, 30, 50, 0.29);
+            transform: scale(1.06);
+        }
+
+        .avatar-link:hover::before {
+            opacity: 1;
+            inset: -13px;
+            border-color: rgba(200, 40, 55, 0.4);
+        }
+
+        .avatar-link:active {
+            transform: scale(0.96);
+        }
+
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .intro-text {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            color: #999;
+            font-size: 0.85rem;
+            font-style: italic;
+            letter-spacing: 0.08em;
+            white-space: nowrap;
+            opacity: 0.7;
+            transition: opacity 0.4s;
+        }
+
+        .intro-name {
+            color: #ccc;
+            font-size: 1rem;
+            font-weight: 500;
+            font-style: normal;
+            letter-spacing: 0.06em;
+            opacity: 1;
+        }
+
+        .intro-desc {
+            color: #999;
+            font-size: 0.78rem;
+            font-style: italic;
+            letter-spacing: 0.05em;
+        }
+
+        .avatar-area:hover .intro-text {
+            opacity: 1;
+            color: #bbb;
+        }
+
+        /* ========== 文章列表区 ========== */
+        .articles {
+            background: #0f0f18;
+            background-image:
+                linear-gradient(180deg,
+                    rgba(20, 10, 15, 0.4) 0%,
+                    transparent 15%),
+                radial-gradient(ellipse at 50% 0%,
+                    rgba(40, 15, 25, 0.5) 0%,
+                    transparent 55%);
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding: 60px 24px 100px;
+            position: relative;
+        }
+
+        /* 文章区过渡分隔线 */
+        .articles::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            max-width: 400px;
+            height: 1px;
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(180, 30, 50, 0.3),
+                    transparent);
+        }
+
+        .articles-container {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .articles-header {
+            margin-bottom: 32px;
+        }
+
+        .articles-title {
+            font-size: 1.3rem;
+            font-weight: 400;
+            color: var(--text-bright);
+            letter-spacing: 0.1em;
+            border-left: 3px solid var(--blood);
+            padding-left: 14px;
+        }
+
+        /* ---- 分类标签 ---- */
+        .category-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--border-faint);
+            padding-bottom: 14px;
+        }
+
+        .tab {
+            color: #888;
+            cursor: pointer;
+            font-size: 0.86rem;
+            padding: 5px 16px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            letter-spacing: 0.04em;
+        }
+
+        .tab:hover {
+            color: #bbb;
+            border-color: #2a2a2a;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .tab.active {
+            color: #fff;
+            background: var(--blood);
+            border-color: var(--blood);
+            box-shadow: 0 0 18px rgba(160, 30, 45, 0.3);
+        }
+
+        /* ---- 文章卡片 ---- */
+        .article-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .article-card {
+            border-bottom: 1px solid #181818;
+            padding: 22px 12px;
+            margin: 0 -12px;
+            border-radius: 8px;
+            transition: all 0.35s ease;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .article-card:last-child {
+            border-bottom: none;
+        }
+
+        .article-card:hover {
+            background: rgba(160, 30, 45, 0.04);
+            padding-left: 20px;
+            padding-right: 12px;
+            border-color: var(--border-active);
+        }
+
+        .article-card:active {
+            background: rgba(160, 30, 45, 0.08);
+            transform: scale(0.995);
+        }
+
+        .article-card a {
+            display: block;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 6px;
+            flex-wrap: wrap;
+        }
+
+        .article-category-tag {
+            font-size: 0.68rem;
+            color: #c05060;
+            background: rgba(160, 30, 45, 0.12);
+            padding: 2px 10px;
+            border-radius: 10px;
+            letter-spacing: 0.06em;
+            flex-shrink: 0;
+            text-transform: uppercase;
+        }
+
+        .article-date {
+            font-size: 0.76rem;
+            color: #555;
+            flex-shrink: 0;
+            letter-spacing: 0.03em;
+        }
+
+        .article-title {
+            font-size: 1.15rem;
+            color: var(--text-bright);
+            font-weight: 500;
+            margin-bottom: 6px;
+            transition: color 0.3s;
+            line-height: 1.4;
+        }
+
+        .article-card:hover .article-title {
+            color: #d45060;
+        }
+
+        .article-excerpt {
+            color: #888;
+            font-size: 0.88rem;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* ---- 无结果 ---- */
+        .no-results {
+            text-align: center;
+            color: #555;
+            padding: 60px 20px;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+        }
+
+
+        .social-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            overflow: hidden;
+            opacity: 0.45;
+            transition: all 0.3s ease;
+            background: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            -webkit-tap-highlight-color: transparent;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .social-icon img {
+            width: 100%;
+            height: 100%;
+            filter: brightness(0.8);
+            transition: filter 0.3s;
+            pointer-events: none;
+        }
+
+        .social-icon:hover {
+            opacity: 1;
+            background: #2a1216;
+            border-color: rgba(180, 30, 50, 0.4);
+            box-shadow: 0 0 22px var(--blood-glow);
+            transform: translateY(-4px);
+        }
+
+        .social-icon:active {
+            transform: translateY(0) scale(0.93);
+        }
+
+        .social-icon:hover img {
+            filter: brightness(1);
+        }
+
+        /* ========== 手机端适配 ========== */
+        @media (max-width: 768px) {
+            .hero::before {
+                background:
+                    radial-gradient(ellipse 90% 60% at 75% 18%,
+                        rgba(120, 20, 35, 0.3) 0%,
+                        rgba(80, 15, 25, 0.06) 45%,
+                        transparent 65%),
+                    radial-gradient(ellipse 40% 40% at 20% 80%,
+                        rgba(60, 10, 20, 0.1) 0%,
+                        transparent 70%),
+                    radial-gradient(ellipse 100% 30% at 50% 100%,
+                        rgba(0, 0, 0, 0.6) 0%,
+                        transparent 60%);
+            }
+
+            .hero-geo.line-1 {
+                width: 100px;
+                top: 16%;
+                left: 6%;
+            }
+
+            .hero-geo.line-2 {
+                width: 90px;
+                bottom: 32%;
+                right: 4%;
+            }
+
+            .hero-geo.circle-1 {
+                width: 80px;
+                height: 80px;
+                top: 18%;
+                right: 10%;
+            }
+
+            .hero-geo.circle-2 {
+                width: 50px;
+                height: 50px;
+                bottom: 36%;
+                left: 8%;
+            }
+
+            .avatar-area {
+                top: 38.2%;
+                right: 38.2%;
+            }
+
+            .avatar-link {
+                width: 86px;
+                height: 86px;
+            }
+
+            .intro-text {
+                font-size: 0.75rem;
+                margin-top: 10px;
+            }
+
+            .articles {
+                padding: 40px 16px 120px;
+            }
+
+            .articles-title {
+                font-size: 1.15rem;
+            }
+
+            .tab {
+                font-size: 0.78rem;
+                padding: 4px 14px;
+            }
+
+            .article-card {
+                padding: 18px 8px;
+                margin: 0 -8px;
+            }
+
+            .article-card:hover {
+                padding-left: 12px;
+                padding-right: 8px;
+            }
+
+            .article-title {
+                font-size: 1.02rem;
+            }
+
+            .article-excerpt {
+                font-size: 0.82rem;
+            }
+
+            .social-bar {
+                bottom: 20px;
+                left: 16px;
+                gap: 8px;
+            }
+
+            .social-icon {
+                width: 40px;
+                height: 40px;
+                border-radius: 8px;
+            }
+
+            .social-icon img {
+                width: 20px;
+                height: 20px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .avatar-link {
+                width: 54px;
+                height: 54px;
+            }
+
+            .intro-text {
+                font-size: 0.7rem;
+            }
+
+            .social-icon {
+                width: 50px;
+                height: 50px;
+            }
+
+            .social-icon img {
+                width: 18px;
+                height: 18px;
+            }
+
+            .tab {
+                font-size: 0.73rem;
+                padding: 4px 12px;
+            }
+        }
+
+        /* ========== 安全区适配 ========== */
+        @supports (padding: env(safe-area-inset-bottom)) {
+            .social-bar {
+                bottom: calc(20px + env(safe-area-inset-bottom));
+                left: calc(16px + env(safe-area-inset-left));
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <script src="js/articles.js"></script>
+    <!-- ==================== 主屏区域 ==================== -->
+    <section class="hero">
+        <!-- 几何装饰 -->
+        <div class="hero-geo line-1"></div>
+        <div class="hero-geo line-2"></div>
+        <div class="hero-geo circle-1"></div>
+        <div class="hero-geo circle-2"></div>
+
+        <!-- 头像区：黄金比例螺旋中心 -->
+        <div class="avatar-area">
+            <a href="about.html" class="avatar-link" title="AboutMe">
+                <img src="images/myself.png" alt="img" class="avatar-img">
+            </a>
+            <div class="intro-text">
+                <span class="intro-name">Shiro</span>
+                <span class="intro-desc">I've been building horrible evil things.</span>
+            </div>
+        </div>
+    </section>
+
+<!-- ==================== 文章列表区 ==================== -->
+<section class="articles">
+    <div class="articles-container">
+        <div class="articles-header">
+            <h2 class="articles-title">Subject</h2>
+        </div>
+
+        <!-- 分类标签 -->
+        <div class="category-tabs">
+            <span class="tab active" data-category="tech">code&games</span>
+            <span class="tab" data-category="life">words&stories</span>
+            <span class="tab" data-category="essay">myLab</span>
+        </div>
+
+        <!-- 引入articles.js动态生成文章 -->
+        <div class="article-list"></div>
+        </div>
+        <p class="no-results" style="display: none;">暂无该分类的文章</p>
+            <script>
+                (function () {
+                    const list = document.querySelector('.article-list');
+                    const tabs = document.querySelectorAll('.tab');
+                    const noResults = document.querySelector('.no-results');
+
+                    // ===== 1. 渲染文章列表 =====
+                    articles.forEach(function (article) {
+                        var card = document.createElement('article');
+                        card.className = 'article-card';
+                        card.setAttribute('data-category', article.category);
+                        card.innerHTML =
+                            '<a href="' + article.link + '">' +
+                                '<div class="article-meta">' +
+                                    '<span class="article-category-tag">' + article.tag + '</span>' +
+                                    '<time class="article-date">' + article.date + '</time>' +
+                                '</div>' +
+                                '<h3 class="article-title">' + article.title + '</h3>' +
+                                '<p class="article-excerpt">' + article.excerpt + '</p>' +
+                            '</a>';
+                        list.appendChild(card);
+                    });
+
+                    // ===== 2. 分类筛选 =====
+                    var cards = document.querySelectorAll('.article-card');
+
+                    function filterCards(category) {
+                        var visibleCount = 0;
+                        cards.forEach(function (card) {
+                            if (card.getAttribute('data-category') === category) {
+                                card.style.display = '';
+                                visibleCount++;
+                            } else {
+                                card.style.display = 'none';
+                            }
+                        });
+                        noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+                    }
+
+                    tabs.forEach(function (tab) {
+                        tab.addEventListener('click', function () {
+                            tabs.forEach(function (t) { t.classList.remove('active'); });
+                            this.classList.add('active');
+                            filterCards(this.getAttribute('data-category'));
+                        });
+                    });
+
+                    // 页面加载默认筛选
+                    var defaultTab = document.querySelector('.tab.active');
+                    if (defaultTab) {
+                        filterCards(defaultTab.getAttribute('data-category'));
+                    }
+                })();
+            </script>
+        </div>
+    <!-- ==================== 社交图标栏 ==================== -->
+    <aside class="social-bar">
+        <a href="#" class="social-icon" target="_blank" rel="noopener" title="小红书">
+            <img src="images/media1.png" alt="小红书">
+        </a>
+        <a href="#" class="social-icon" target="_blank" rel="noopener" title="B站">
+            <img src="images/media2.png" alt="B站">
+        </a>
+        <a href="#" class="social-icon" target="_blank" rel="noopener" title="X">
+            <img src="images/media3.png" alt="X">
+        </a>
+    </aside>
+
+    <!-- ==================== 分类切换脚本 ==================== -->
+    <script>
+        (function () {
+            const tabs = document.querySelectorAll('.tab');
+            const cards = document.querySelectorAll('.article-card');
+            const noResults = document.querySelector('.no-results');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function () {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const category = this.getAttribute('data-category');
+                    let visibleCount = 0;
+
+                    cards.forEach(card => {
+                        if (category === 'all' || card.getAttribute('data-category') === category) {
+                            card.style.display = '';
+                            visibleCount++;
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+
+                    if (visibleCount === 0) {
+                        noResults.style.display = 'block';
+                    } else {
+                        noResults.style.display = 'none';
+                    }
+                });
+
+                // 页面加载时默认显示 tech 分类
+                document.addEventListener('DOMContentLoaded', function () {
+                    const defaultTab = document.querySelector('.tab.active');
+                    if (defaultTab) {
+                        defaultTab.click();
+                    }
+});
+            });
+        })();
+    </script>
+    <script>
+        (function () {
+            var bar = document.querySelector('.social-bar');
+            var hero = document.querySelector('.hero');
+
+            window.addEventListener('scroll', function () {
+                var heroBottom = hero.offsetTop + hero.offsetHeight;
+                if (window.scrollY + window.innerHeight * 0.2 > heroBottom) {
+                    bar.style.opacity = '0';
+                    bar.style.pointerEvents = 'none';
+                } else {
+                    bar.style.opacity = '';
+                    bar.style.pointerEvents = '';
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
