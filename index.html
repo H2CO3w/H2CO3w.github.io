@@ -648,78 +648,29 @@
     </section>
 
 <!-- ==================== 文章列表区 ==================== -->
-<section class="articles">
-    <div class="articles-container">
-        <div class="articles-header">
-            <h2 class="articles-title">Subject</h2>
+    <section class="articles">
+        <div class="articles-container">
+            <div class="articles-header">
+                <h2 class="articles-title">Subject</h2>
+            </div>
+
+            <!-- 分类标签 -->
+            <div class="category-tabs">
+                <span class="tab active" data-category="tech">code&games</span>
+                <span class="tab" data-category="life">words&stories</span>
+                <span class="tab" data-category="essay">myLab</span>
+            </div>
+
+            <!-- 文章列表容器 -->
+            <div class="article-list">
+                <!-- 由 JS 动态生成 -->
+            </div>
+
+            <!-- 无结果提示 -->
+            <p class="no-results" style="display: none;">暂无该分类的文章</p>
         </div>
+    </section>
 
-        <!-- 分类标签 -->
-        <div class="category-tabs">
-            <span class="tab active" data-category="tech">code&games</span>
-            <span class="tab" data-category="life">words&stories</span>
-            <span class="tab" data-category="essay">myLab</span>
-        </div>
-
-        <!-- 引入articles.js动态生成文章 -->
-        <div class="article-list"></div>
-        </div>
-        <p class="no-results" style="display: none;">暂无该分类的文章</p>
-            <script>
-                (function () {
-                    const list = document.querySelector('.article-list');
-                    const tabs = document.querySelectorAll('.tab');
-                    const noResults = document.querySelector('.no-results');
-
-                    // ===== 1. 渲染文章列表 =====
-                    articles.forEach(function (article) {
-                        var card = document.createElement('article');
-                        card.className = 'article-card';
-                        card.setAttribute('data-category', article.category);
-                        card.innerHTML =
-                            '<a href="' + article.link + '">' +
-                                '<div class="article-meta">' +
-                                    '<span class="article-category-tag">' + article.tag + '</span>' +
-                                    '<time class="article-date">' + article.date + '</time>' +
-                                '</div>' +
-                                '<h3 class="article-title">' + article.title + '</h3>' +
-                                '<p class="article-excerpt">' + article.excerpt + '</p>' +
-                            '</a>';
-                        list.appendChild(card);
-                    });
-
-                    // ===== 2. 分类筛选 =====
-                    var cards = document.querySelectorAll('.article-card');
-
-                    function filterCards(category) {
-                        var visibleCount = 0;
-                        cards.forEach(function (card) {
-                            if (card.getAttribute('data-category') === category) {
-                                card.style.display = '';
-                                visibleCount++;
-                            } else {
-                                card.style.display = 'none';
-                            }
-                        });
-                        noResults.style.display = visibleCount === 0 ? 'block' : 'none';
-                    }
-
-                    tabs.forEach(function (tab) {
-                        tab.addEventListener('click', function () {
-                            tabs.forEach(function (t) { t.classList.remove('active'); });
-                            this.classList.add('active');
-                            filterCards(this.getAttribute('data-category'));
-                        });
-                    });
-
-                    // 页面加载默认筛选
-                    var defaultTab = document.querySelector('.tab.active');
-                    if (defaultTab) {
-                        filterCards(defaultTab.getAttribute('data-category'));
-                    }
-                })();
-            </script>
-        </div>
     <!-- ==================== 社交图标栏 ==================== -->
     <aside class="social-bar">
         <a href="#" class="social-icon" target="_blank" rel="noopener" title="小红书">
@@ -733,55 +684,75 @@
         </a>
     </aside>
 
-    <!-- ==================== 分类切换脚本 ==================== -->
+    <!-- ==================== 脚本 ==================== -->
+    <script src="js/articles.js"></script>
+
     <script>
         (function () {
-            const tabs = document.querySelectorAll('.tab');
-            const cards = document.querySelectorAll('.article-card');
-            const noResults = document.querySelector('.no-results');
+            var list = document.querySelector('.article-list');
+            var tabsContainer = document.querySelector('.category-tabs');
+            var noResults = document.querySelector('.no-results');
 
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function () {
-                    tabs.forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
+            // 渲染文章列表
+            if (list && typeof articles !== 'undefined') {
+                articles.forEach(function (article) {
+                    var card = document.createElement('article');
+                    card.className = 'article-card';
+                    card.setAttribute('data-category', article.category);
+                    card.innerHTML =
+                        '<a href="' + article.link + '">' +
+                            '<div class="article-meta">' +
+                                '<span class="article-category-tag">' + article.tag + '</span>' +
+                                '<time class="article-date">' + article.date + '</time>' +
+                            '</div>' +
+                            '<h3 class="article-title">' + article.title + '</h3>' +
+                            '<p class="article-excerpt">' + article.excerpt + '</p>' +
+                        '</a>';
+                    list.appendChild(card);
+                });
+            }
 
-                    const category = this.getAttribute('data-category');
-                    let visibleCount = 0;
-
-                    cards.forEach(card => {
-                        if (category === 'all' || card.getAttribute('data-category') === category) {
-                            card.style.display = '';
-                            visibleCount++;
-                        } else {
-                            card.style.display = 'none';
-                        }
-                    });
-
-                    if (visibleCount === 0) {
-                        noResults.style.display = 'block';
+            // 分类筛选
+            function filterCards(category) {
+                var cards = document.querySelectorAll('.article-card');
+                var count = 0;
+                cards.forEach(function (card) {
+                    if (category === 'all' || card.getAttribute('data-category') === category) {
+                        card.style.display = '';
+                        count++;
                     } else {
-                        noResults.style.display = 'none';
+                        card.style.display = 'none';
                     }
                 });
+                if (noResults) {
+                    noResults.style.display = count === 0 ? 'block' : 'none';
+                }
+            }
 
-                // 页面加载时默认显示 tech 分类
-                document.addEventListener('DOMContentLoaded', function () {
-                    const defaultTab = document.querySelector('.tab.active');
-                    if (defaultTab) {
-                        defaultTab.click();
-                    }
-});
-            });
+            if (tabsContainer) {
+                var tabs = tabsContainer.querySelectorAll('.tab');
+                tabs.forEach(function (tab) {
+                    tab.addEventListener('click', function () {
+                        tabs.forEach(function (t) { t.classList.remove('active'); });
+                        this.classList.add('active');
+                        filterCards(this.getAttribute('data-category'));
+                    });
+                });
+                var defaultTab = tabsContainer.querySelector('.tab.active');
+                if (defaultTab) {
+                    filterCards(defaultTab.getAttribute('data-category'));
+                }
+            }
         })();
     </script>
+
     <script>
         (function () {
             var bar = document.querySelector('.social-bar');
             var hero = document.querySelector('.hero');
-
+            if (!bar || !hero) return;
             window.addEventListener('scroll', function () {
-                var heroBottom = hero.offsetTop + hero.offsetHeight;
-                if (window.scrollY + window.innerHeight * 0.2 > heroBottom) {
+                if (window.scrollY > hero.offsetTop + hero.offsetHeight) {
                     bar.style.opacity = '0';
                     bar.style.pointerEvents = 'none';
                 } else {
