@@ -250,7 +250,7 @@
 
         .intro-desc {
             color: #999;
-            font-size: 0.78rem;
+            font-size: 0.65rem;
             font-style: italic;
             letter-spacing: 0.05em;
         }
@@ -656,9 +656,10 @@
 
             <!-- 分类标签 -->
             <div class="category-tabs">
-                <span class="tab active" data-category="tech">code&games</span>
-                <span class="tab" data-category="life">words&stories</span>
-                <span class="tab" data-category="essay">myLab</span>
+                <span class="tab active" data-category="games">Games</span>
+                <span class="tab" data-category="writing">Writing</span>
+                <span class="tab" data-category="lab">Lab</span>
+                <span class="tab" data-category="code">Code</span>
             </div>
 
             <!-- 文章列表容器 -->
@@ -752,7 +753,7 @@
             var hero = document.querySelector('.hero');
             if (!bar || !hero) return;
             window.addEventListener('scroll', function () {
-                if (window.scrollY > hero.offsetTop + hero.offsetHeight) {
+                if (window.scrollY + window.innerHeight * 0.5 > hero.offsetTop + hero.offsetHeight) {
                     bar.style.opacity = '0';
                     bar.style.pointerEvents = 'none';
                 } else {
