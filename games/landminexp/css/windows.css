@@ -1,0 +1,192 @@
+/* ===== 扫雷窗口 ===== */
+#game { z-index: 10; }
+#game .led {
+  background: #000;
+  color: #ff66b2;
+  font-family: "Courier New", monospace;
+  font-size: 26px;
+  font-weight: bold;
+  padding: 4px 10px;
+  min-width: 70px;
+  text-align: center;
+  letter-spacing: 3px;
+  border: 3px solid;
+  border-color: #c06c84 #fff0f5 #fff0f5 #c06c84;
+}
+#top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+#reset-btn {
+  background: #ffb6c1;
+  border: 3px solid;
+  border-color: #fff0f5 #c06c84 #c06c84 #fff0f5;
+  width: 52px;
+  height: 52px;
+  padding: 3px;
+  cursor: pointer;
+  line-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#reset-btn img,
+#reset-btn video {
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  display: block;
+  object-fit: contain;
+}
+#reset-btn:active { border-color: #c06c84 #fff0f5 #fff0f5 #c06c84; }
+canvas#board {
+  display: block;
+  cursor: pointer;
+  border: 3px solid;
+  border-color: #c06c84 #fff0f5 #fff0f5 #c06c84;
+  background: #ffd9e6;
+}
+
+/* ===== 监控窗口 ===== */
+#compat { z-index: 5; }
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+  font-size: 15px;
+  color: #333;
+}
+.stat-label { font-weight: bold; color: #b3004d; flex-shrink: 0; }
+.stat-bar-bg {
+  flex: 1;
+  height: 16px;
+  background: #f0c8d0;
+  border: 2px solid;
+  border-color: #d36b86 #fff0f5 #fff0f5 #d36b86;
+  margin-left: 8px;
+  overflow: hidden;
+}
+.stat-bar {
+  height: 100%;
+  width: 50%;
+  background: linear-gradient(90deg, #ff4d6d, #ff85a2);
+  transition: width 0.3s ease;
+}
+.stat-value {
+  min-width: 30px;
+  text-align: right;
+  font-weight: bold;
+  color: #d6004d;
+  font-size: 16px;
+}
+
+/* ===== 日历窗口 ===== */
+#calendar { z-index: 5; width: 260px; }
+#clock {
+  font-size: 28px;
+  text-align: center;
+  background: #000;
+  color: #ff66b2;
+  padding: 5px;
+  margin-bottom: 8px;
+  font-family: 'Courier New', monospace;
+  border: 2px solid;
+  border-color: #c06c84 #fff0f5 #fff0f5 #c06c84;
+}
+#cal-header {
+  text-align: center;
+  font-weight: bold;
+  color: #b3004d;
+  margin: 5px 0;
+  font-size: 16px;
+}
+#cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+#cal-grid .day-label {
+  background: #ffb6c1;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+  padding: 2px 0;
+  font-size: 12px;
+}
+#cal-grid .day {
+  text-align: center;
+  padding: 4px 0;
+  background: #fff0f5;
+  color: #333;
+  font-size: 13px;
+  border: 1px solid #f0c8d0;
+}
+#cal-grid .day.active {
+  background: #ff4d6d;
+  color: #fff;
+  font-weight: bold;
+}
+
+/* ===== 惩罚窗口 ===== */
+#punish { z-index: 300; text-align: center; display: none; }
+#punish .window-body p { color: #c6004d; font-weight: bold; }
+#cut-btn {
+  font-size: 26px;
+  padding: 10px 28px;
+  border: 3px solid;
+  border-color: #fff0f5 #c06c84 #c06c84 #fff0f5;
+  background: #ff4d6d;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+  font-family: "Courier New", monospace;
+}
+#cut-btn:active {
+  border-color: #c06c84 #fff0f5 #fff0f5 #c06c84;
+  transform: scale(0.95);
+}
+
+/* ===== 道具栏 ===== */
+#items { z-index: 5; width: 260px; }
+.item-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+.item-btn {
+  background: #fff0f5;
+  border: 3px solid;
+  border-color: #fff0f5 #c06c84 #c06c84 #fff0f5;
+  padding: 4px;
+  cursor: pointer;
+  line-height: 0;
+}
+.item-btn img {
+  width: 64px;
+  height: 64px;
+  display: block;
+  image-rendering: pixelated;
+}
+.item-btn:active {
+  border-color: #c06c84 #fff0f5 #fff0f5 #c06c84;
+  transform: scale(0.95);
+}
+.item-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  filter: grayscale(1);
+}
+.item-desc p {
+  font-size: 12px;
+  color: #b3004d;
+  margin: 4px 0;
+  line-height: 1.4;
+  text-align: left;
+}
+
+/* ===== 方块 ===== */
+.cut-counter { margin-top: 10px; font-size: 18px; color: #b3004d; font-weight: bold; }

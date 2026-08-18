@@ -1,0 +1,58 @@
+/* ===== 启动加载界面 ===== */
+#loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background-color: #2a0e2e;
+  background-image: url('../assets/images/loadingscreen.jpg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: opacity 0.6s ease;
+  pointer-events: all;
+}
+#loading-screen.done {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 进度条外框：纯色、无边框 */
+.loading-bar-bg {
+  position: absolute;
+  left: 50%;
+  top: 78%;
+  transform: translate(-50%, -50%);
+  width: 16vw;
+  height: 2.5vh;
+  min-width: 160px;
+  min-height: 20px;
+  background: #2a0e2e;           /* 深紫红纯色底 */
+  border: none;                  /* 无边框 */
+  overflow: hidden;
+}
+
+/* 进度条填充：纯色亮粉 */
+.loading-bar-fill {
+  width: 0%;
+  height: 100%;
+  background: #ff66b2;           /* 纯色，无渐变 */
+  transition: width 0.1s linear;
+}
+
+
+/* ===== 最后一秒变暗过渡 ===== */
+#loading-screen {
+  position: fixed;
+}
+#loading-screen.dim::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  animation: loading-dim 1s linear forwards;
+  pointer-events: none;
+}
+@keyframes loading-dim {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}

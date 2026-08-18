@@ -59,16 +59,6 @@
             background: var(--dark-base);
         }
 
-        /* ========== 社交图标：左下角固定 ========== */
-        .social-bar {
-            position: fixed;
-            bottom: 28px;
-            left: 28px;
-            display: flex;
-            gap: 10px;
-            z-index: 100;
-        }
-        
         /* ---- 背景装饰层 ---- */
         .hero::before {
             content: '';
@@ -97,13 +87,11 @@
             position: absolute;
             inset: 0;
             background-image:
-                /* 细微噪点纹理 */
                 repeating-linear-gradient(0deg,
                     transparent,
                     transparent 2px,
                     rgba(63, 12, 12, 0.039) 2px,
                     rgba(93, 14, 14, 0) 4px),
-                /* 细线装饰 —— 画面右上黄金螺旋引导线 */
                 linear-gradient(135deg,
                     transparent 61.8%,
                     rgba(124, 103, 19, 0.212) 61.8%,
@@ -163,7 +151,7 @@
             border-radius: 50%;
         }
 
-        /* ---- 头像区：黄金比例螺旋中心 ---- */
+        /* ---- 头像区 ---- */
         .avatar-area {
             position: absolute;
             top: 38.2%;
@@ -440,49 +428,6 @@
             letter-spacing: 0.05em;
         }
 
-
-        .social-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 10px;
-            overflow: hidden;
-            opacity: 0.45;
-            transition: all 0.3s ease;
-            background: #1a1a1a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            -webkit-tap-highlight-color: transparent;
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-        }
-
-        .social-icon img {
-            width: 100%;
-            height: 100%;
-            filter: brightness(0.8);
-            transition: filter 0.3s;
-            pointer-events: none;
-        }
-
-        .social-icon:hover {
-            opacity: 1;
-            background: #2a1216;
-            border-color: rgba(180, 30, 50, 0.4);
-            box-shadow: 0 0 22px var(--blood-glow);
-            transform: translateY(-4px);
-        }
-
-        .social-icon:active {
-            transform: translateY(0) scale(0.93);
-        }
-
-        .social-icon:hover img {
-            filter: brightness(1);
-        }
-
         /* ========== 手机端适配 ========== */
         @media (max-width: 768px) {
             .hero::before {
@@ -570,23 +515,6 @@
             .article-excerpt {
                 font-size: 0.82rem;
             }
-
-            .social-bar {
-                bottom: 20px;
-                left: 16px;
-                gap: 8px;
-            }
-
-            .social-icon {
-                width: 40px;
-                height: 40px;
-                border-radius: 8px;
-            }
-
-            .social-icon img {
-                width: 20px;
-                height: 20px;
-            }
         }
 
         @media (max-width: 380px) {
@@ -599,34 +527,15 @@
                 font-size: 0.7rem;
             }
 
-            .social-icon {
-                width: 50px;
-                height: 50px;
-            }
-
-            .social-icon img {
-                width: 18px;
-                height: 18px;
-            }
-
             .tab {
                 font-size: 0.73rem;
                 padding: 4px 12px;
-            }
-        }
-
-        /* ========== 安全区适配 ========== */
-        @supports (padding: env(safe-area-inset-bottom)) {
-            .social-bar {
-                bottom: calc(20px + env(safe-area-inset-bottom));
-                left: calc(16px + env(safe-area-inset-left));
             }
         }
     </style>
 </head>
 <body>
 
-    <script src="js/articles.js"></script>
     <!-- ==================== 主屏区域 ==================== -->
     <section class="hero">
         <!-- 几何装饰 -->
@@ -635,7 +544,7 @@
         <div class="hero-geo circle-1"></div>
         <div class="hero-geo circle-2"></div>
 
-        <!-- 头像区：黄金比例螺旋中心 -->
+        <!-- 头像区 -->
         <div class="avatar-area">
             <a href="about.html" class="avatar-link" title="AboutMe">
                 <img src="images/myself.png" alt="img" class="avatar-img">
@@ -647,7 +556,7 @@
         </div>
     </section>
 
-<!-- ==================== 文章列表区 ==================== -->
+    <!-- ==================== 文章列表区 ==================== -->
     <section class="articles">
         <div class="articles-container">
             <div class="articles-header">
@@ -671,19 +580,6 @@
             <p class="no-results" style="display: none;">暂无该分类的文章</p>
         </div>
     </section>
-
-    <!-- ==================== 社交图标栏 ==================== -->
-    <aside class="social-bar">
-        <a href="#" class="social-icon" target="_blank" rel="noopener" title="小红书">
-            <img src="images/media1.png" alt="小红书">
-        </a>
-        <a href="#" class="social-icon" target="_blank" rel="noopener" title="B站">
-            <img src="images/media2.png" alt="B站">
-        </a>
-        <a href="#" class="social-icon" target="_blank" rel="noopener" title="X">
-            <img src="images/media3.png" alt="X">
-        </a>
-    </aside>
 
     <!-- ==================== 脚本 ==================== -->
     <script src="js/articles.js"></script>
@@ -744,23 +640,6 @@
                     filterCards(defaultTab.getAttribute('data-category'));
                 }
             }
-        })();
-    </script>
-
-    <script>
-        (function () {
-            var bar = document.querySelector('.social-bar');
-            var hero = document.querySelector('.hero');
-            if (!bar || !hero) return;
-            window.addEventListener('scroll', function () {
-                if (window.scrollY + window.innerHeight * 0.5 > hero.offsetTop + hero.offsetHeight) {
-                    bar.style.opacity = '0';
-                    bar.style.pointerEvents = 'none';
-                } else {
-                    bar.style.opacity = '';
-                    bar.style.pointerEvents = '';
-                }
-            });
         })();
     </script>
 </body>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>windows_landmine</title>
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/windows.css">
+<link rel="stylesheet" href="css/effects.css">
+<link rel="stylesheet" href="css/loading.css">
+</head>
+<body>
+  <!-- ===== 启动加载界面 ===== -->
+  <div id="loading-screen">
+    <div class="loading-bar-bg" id="loading-bar">
+      <div class="loading-bar-fill" id="loading-fill"></div>
+    </div>
+  </div>
+
+  <!-- 桌面图标栏（竖排） -->
+  <div id="desktop-icons">
+    <div class="desk-icon" data-target="compat">
+      <img src="assets/images/health.png" alt="健康">
+      <span>健康</span>
+    </div>
+    <div class="desk-icon" data-target="calendar">
+      <img src="assets/images/calendar.png" alt="日历">
+      <span>日历</span>
+    </div>
+    <div class="desk-icon" data-target="items">
+      <img src="assets/images/tool.png" alt="工具">
+      <span>工具</span>
+    </div>
+  </div>
+
+  <!-- 扫雷窗口 -->
+  <div id="game" class="window">
+    <div class="window-titlebar">
+      <span class="title-text">扫雷</span>
+    </div>
+    <div class="window-body">
+      <div id="top">
+        <div class="led" id="mine-count">010</div>
+        <button id="reset-btn">
+          <img id="reset-img" src="assets/images/normal.gif" alt="reset">
+          <video id="reset-video" muted playsinline style="display:none;"></video>
+        </button>
+        <div class="led" id="timer">240</div>
+      </div>
+      <canvas id="board"></canvas>
+    </div>
+  </div>
+
+  <!-- 健康窗口 -->
+  <div id="compat" class="window" style="display:none;">
+    <div class="window-titlebar">
+      <span class="title-text">健康</span>
+      <button class="win-close" data-target="compat">×</button>
+    </div>
+    <div class="window-body">
+      <div class="stat-item">
+        <span class="stat-label">压力值</span>
+        <div class="stat-bar-bg"><div class="stat-bar" id="bar-stress" style="width:40%;"></div></div>
+        <span class="stat-value" id="val-stress">40</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">阴暗值</span>
+        <div class="stat-bar-bg"><div class="stat-bar dark-bar" id="bar-dark" style="width:0%;"></div></div>
+        <span class="stat-value" id="val-dark">0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 日历窗口 -->
+  <div id="calendar" class="window" style="display:none;">
+    <div class="window-titlebar">
+      <span class="title-text">日历</span>
+      <button class="win-close" data-target="calendar">×</button>
+    </div>
+    <div class="window-body">
+      <div id="clock">00:00</div>
+      <div id="cal-header">六月</div>
+      <div id="cal-grid"></div>
+    </div>
+  </div>
+
+  <!-- 工具窗口 -->
+  <div id="items" class="window" style="display:none;">
+    <div class="window-titlebar">
+      <span class="title-text">工具</span>
+      <button class="win-close" data-target="items">×</button>
+    </div>
+    <div class="window-body">
+      <div class="item-row">
+        <button class="item-btn" id="item-wine" title="酒">
+          <img src="assets/images/wine.png" alt="酒">
+        </button>
+        <button class="item-btn" id="item-smoke" title="烟">
+          <img src="assets/images/smoke.png" alt="烟">
+        </button>
+        <button class="item-btn" id="item-drug" title="药">
+          <img src="assets/images/drug.png" alt="药">
+        </button>
+      </div>
+      <div class="item-desc">
+        <p>酒：免疫下一次踩雷（模糊10s 阴暗+15）</p>
+        <p>烟：暂停时间20秒（灰雾 阴暗+15）</p>
+        <p>药：压力归零+免疫20s（阴暗+40）</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 惩罚窗口 -->
+  <div id="punish" class="window">
+    <div class="window-titlebar"><span class="title-text">割吧</span></div>
+    <div class="window-body">
+      <p>…割吧。</p>
+      <button id="cut-btn">割</button>
+    </div>
+  </div>
+
+  <!-- 全屏特效层 -->
+  <div id="fx-blur" class="fx-layer hidden"></div>
+  <div id="fx-smoke" class="fx-layer hidden"></div>
+  <div id="fx-drug" class="fx-layer hidden"></div>
+
+  <!-- 红色覆盖层 -->
+  <div id="red-overlay"></div>
+
+  <!-- 失败CG -->
+  <div id="failCG" class="overlay hidden">
+    <div id="fail-texts"></div>
+    <button id="restart-fail" class="hidden">重新开始</button>
+  </div>
+
+  <!-- 胜利CG -->
+  <div id="winCG" class="overlay hidden">
+    <h1>YOU SURVIVED</h1>
+    <p id="win-day-text">已进入 6月1日</p>
+    <button id="restart-win">继续</button>
+  </div>
+
+  <!-- 游戏结束窗口 -->
+  <div id="gameover" class="window" style="display:none;">
+    <div class="window-titlebar"><span class="title-text">可以结束了</span></div>
+    <div class="window-body">
+      <p> </p>
+      <p>结束吧。</p>
+      <button id="quit-btn">结束</button>
+    </div>
+  </div>
+
+  <script src="js/config.js" defer></script>
+  <script src="js/state.js" defer></script>
+  <script src="js/audio.js" defer></script>
+  <script src="js/ui.js" defer></script>
+  <script src="js/render.js" defer></script>
+  <script src="js/items.js" defer></script>
+  <script src="js/cg.js" defer></script>
+  <script src="js/board.js" defer></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/loading.js" defer></script>
+</body>
+</html>

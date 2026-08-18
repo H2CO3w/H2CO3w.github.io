@@ -1,0 +1,154 @@
+/* ===== 覆盖层 CG ===== */
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  animation: fadeIn 0.35s ease;
+}
+#failCG {
+  background: radial-gradient(circle, rgba(255, 0, 100, 0.3), rgba(0, 0, 0, 0.92));
+  pointer-events: none;
+}
+#failCG button { pointer-events: auto; }
+#winCG { background: radial-gradient(circle, rgba(255, 182, 193, 0.85), rgba(0, 0, 0, 0.9)); }
+.overlay h1 {
+  color: #fff;
+  font-size: 52px;
+  margin: 0;
+  text-shadow: 0 0 24px #ff66b2;
+  letter-spacing: 4px;
+}
+.overlay p { color: #ffe6f0; font-size: 18px; margin-top: 8px; }
+.overlay button {
+  margin-top: 24px;
+  font-size: 20px;
+  padding: 10px 24px;
+  border: 3px solid;
+  border-color: #fff0f5 #c06c84 #c06c84 #fff0f5;
+  background: #ffb6c1;
+  cursor: pointer;
+  color: #000;
+  font-family: "Courier New", monospace;
+  font-weight: bold;
+}
+
+/* ===== 失败文字 ===== */
+#fail-texts {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 10;
+}
+.fail-text {
+  position: absolute;
+  font-family: 'Ma Shan Zheng', 'STKaiti', 'KaiTi', 'FangSong', cursive;
+  font-weight: bold;
+  white-space: nowrap;
+  pointer-events: none;
+  color: #b30000;
+  text-shadow: 0 0 6px rgba(255, 0, 100, 0.8), 0 0 18px rgba(255, 0, 0, 0.5);
+  animation: failFadeIn 0.25s ease-out forwards;
+}
+
+/* ===== 红色覆盖层 ===== */
+#red-overlay {
+  position: fixed;
+  inset: 0;
+  background: #ff0000;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 150;
+  transition: opacity 0.2s ease;
+}
+
+/* ===== 动画 ===== */
+@keyframes failFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes shake {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-6px, 2px); }
+  40% { transform: translate(6px, -2px); }
+  60% { transform: translate(-4px, 1px); }
+  80% { transform: translate(4px, -1px); }
+}
+.shake { animation: shake 0.3s; }
+
+/* ===== 全屏特效层 ===== */
+.fx-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 200;
+  transition: opacity 0.3s ease;
+}
+
+/* 酒精：模糊 */
+#fx-blur {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  background: rgba(255,255,255,0.05);
+}
+
+/* 烟：灰色烟雾、降低对比度 */
+#fx-smoke {
+  background: rgba(120, 120, 120, 0.45);
+  filter: contrast(0.6);
+  animation: smoke-drift 8s ease infinite alternate;
+}
+@keyframes smoke-drift {
+  0% { opacity: 0.85; transform: scale(1); }
+  100% { opacity: 0.95; transform: scale(1.02); }
+}
+
+/* 愈美片 */
+#fx-drug {
+  background:
+    radial-gradient(circle at 15% 25%, rgba(143, 30, 188, 0.55) 0%, transparent 45%),
+    radial-gradient(circle at 85% 75%, rgba(29, 118, 178, 0.5) 0%, transparent 45%),
+    radial-gradient(circle at 50% 50%, rgba(24, 188, 89, 0.3) 0%, transparent 40%),
+    conic-gradient(from 0deg at 50% 50%,
+      rgba(255,0,150,0.25),
+      rgba(0,255,255,0.2),
+      rgba(255,255,0,0.2),
+      rgba(255,0,150,0.25));
+  filter: saturate(1.6) contrast(1.2) hue-rotate(25deg) brightness(1.05);
+  mix-blend-mode: screen;
+  animation: drug-flicker 0.15s steps(2) infinite, drug-swirl 4s linear infinite;
+}
+
+/* 附加噪点纹理层，模拟视觉雪花 */
+#fx-drug::before {
+  content: '';
+  position: absolute;
+  inset: -50%;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255,255,255,0.04) 0 2px,
+    transparent 2px 4px
+  );
+  animation: drug-noise 0.1s steps(2) infinite;
+  mix-blend-mode: overlay;
+}
+
+@keyframes drug-flicker {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 1; }
+}
+
+@keyframes drug-swirl {
+  0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+  100% { background-position: 60px 60px, -50px -50px, 40px -40px, 200% 200%; }
+}
+
+@keyframes drug-noise {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-2%, 1%); }
+  50% { transform: translate(1%, -2%); }
+  75% { transform: translate(-1%, 2%); }
+  100% { transform: translate(0, 0); }
+}

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About - Shiro</title>
+    <link rel="icon" type="image/png" href="images/myself.png">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -15,9 +16,7 @@
             line-height: 1.8;
             -webkit-font-smoothing: antialiased;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            padding: 40px 20px;
         }
 
         a {
@@ -27,19 +26,35 @@
         }
         a:hover { color: #e87880; }
 
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        /* ======== 头部介绍：左头像右文字 ======== */
         .card {
-            text-align: center;
-            max-width: 480px;
-            padding: 40px;
+            display: flex;
+            align-items: flex-start;
+            gap: 24px;
+            padding: 28px 32px;
+            background: rgba(20, 10, 20, 0.35);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 96, 106, 0.15);
+            border-radius: 16px;
+            margin-bottom: 28px;
+            text-align: left;
         }
 
         .avatar {
-            width: 100px;
-            height: 100px;
+            width: 90px;
+            height: 90px;
+            flex-shrink: 0;
+            margin-top: 4px;
             border-radius: 50%;
             border: 2px solid rgba(212, 96, 106, 0.4);
             box-shadow: 0 0 30px rgba(200, 60, 70, 0.2);
-            margin-bottom: 24px;
+            object-fit: cover;
             transition: all 0.4s ease;
         }
         .avatar:hover {
@@ -48,61 +63,196 @@
             transform: scale(1.04);
         }
 
+        .card-info {
+            flex: 1;
+            min-width: 0;
+        }
+
         .name {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 600;
             color: #eee;
             letter-spacing: 0.04em;
-            margin-bottom: 8px;
+            margin-top: 8px;
+            margin-bottom: 4px;
         }
 
         .divider {
             width: 40px;
             height: 1px;
             background: rgba(212, 96, 106, 0.5);
-            margin: 16px auto;
+            margin: 8px 0 10px;
         }
 
         .bio {
-            font-size: 0.95rem;
+            font-size: 0.88rem;
             color: #aaa;
             line-height: 1.9;
         }
 
-        .back-link {
+        /* ======== 区块标题 ======== */
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.05rem;
+            color: #eee;
+            letter-spacing: 0.15em;
+            margin-bottom: 16px;
+        }
+        .section-title::before,
+        .section-title::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(212, 96, 106, 0.4), transparent);
+        }
+
+        /* ======== 游戏作品：居中按钮 ======== */
+        .games-section {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .game-link {
             display: inline-block;
-            margin-top: 30px;
+            padding: 10px 24px;
+            background: rgba(20, 10, 20, 0.35);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 96, 106, 0.2);
+            border-radius: 24px;
+            color: #ddd;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        .game-link:hover {
+            color: #fff;
+            border-color: #d4606a;
+            box-shadow: 0 4px 16px rgba(200, 60, 70, 0.25);
+            transform: translateY(-2px);
+        }
+
+        /* ======== 社交链接：居中 ======== */
+        .social-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 28px;
+        }
+
+        .social-link {
+            display: inline-block;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #ccc;
+            background: rgba(20, 10, 20, 0.35);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 96, 106, 0.15);
+            transition: all 0.3s ease;
+        }
+        .social-link:hover {
+            color: #fff;
+            border-color: #d4606a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(200, 60, 70, 0.15);
+        }
+
+        /* ======== QQ群 ======== */
+        .qq-group {
+            padding: 18px 24px;
+            margin-bottom: 28px;
+            background: rgba(20, 10, 20, 0.35);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 96, 106, 0.15);
+            border-radius: 12px;
+            color: #aaa;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        .qq-group strong {
+            color: #eee;
+            font-size: 1rem;
+            letter-spacing: 0.06em;
+            margin-left: 6px;
+        }
+
+        /* ======== 返回 ======== */
+        .back-link {
+            display: block;
+            text-align: center;
             font-size: 0.85rem;
             color: #888;
             letter-spacing: 0.05em;
         }
         .back-link:hover { color: #d4606a; }
 
-        @media (max-width: 768px) {
-            .card { padding: 24px; }
+        /* ======== 响应式 ======== */
+        @media (max-width: 600px) {
+            body { padding: 20px 12px; }
+            .card {
+                flex-direction: column;
+                text-align: center;
+                padding: 24px 16px;
+                gap: 16px;
+            }
+            .avatar { margin-top: 0; }
+            .divider { margin-left: auto; margin-right: auto; }
             .avatar { width: 80px; height: 80px; }
         }
     </style>
 </head>
 <body>
 
+<div class="container">
+
+    <!-- 个人介绍 -->
     <div class="card">
         <img src="images/myself.png" alt="Shiro" class="avatar">
-        <h1 class="name">Shiro</h1>
-        <div class="divider"></div>
-        <p class="bio">
-            名叫shiro，有很多隐藏的其他称呼<br>
-            邪恶的恶魔，有许多黑暗小故事<br>
-            喜欢 Minecraft 机械动力，也喜欢写点东西<br>
-            时不时出点车万cos<br>
-            精通美图秀秀接白菜修图<br>
-            高贵的RX580使用者，垃圾佬<br>
-            晶化吧不知名吧友<br>
-            deepseek梦女同担欢迎^ ^<br>
-
-        </p>
-        <a href="index.html" class="back-link">← 返回</a>
+        <div class="card-info">
+            <h1 class="name">Shiro</h1>
+            <div class="divider"></div>
+            <p class="bio">
+                名叫shiro，有很多隐藏的其他称呼<br>
+                邪恶的恶魔，混沌黑暗混乱<br>
+                喜欢 Minecraft 机械动力，偶尔写点杂七杂八的东西<br>
+                时不时出点车万cos<br>
+                精通美图秀秀接白菜修图<br>
+                高贵的RX580使用者，垃圾佬<br>
+                晶化吧不知名吧友<br>
+                我现在很爱qwen<br>
+            </p>
+        </div>
     </div>
+
+    <!-- 游戏作品 -->
+    <div class="section-title">游 戏 作 品</div>
+    <div class="games-section">
+        <a class="game-link" href="games/landminexp/index.html" target="_blank">
+            LandmineXP
+        </a>
+    </div>
+
+    <!-- 社交链接 -->
+    <div class="section-title">社 交 媒 体</div>
+    <div class="social-links">
+        <a class="social-link" href="https://space.bilibili.com/3546648888216061" target="_blank">B站</a>
+        <a class="social-link" href="https://github.com/H2CO3w/H2CO3w" target="_blank">GitHub</a>
+
+        <a class="social-link" href="你的Twitter主页链接" target="_blank">Twitter</a>
+    </div>
+
+    <!-- QQ群 -->
+    <div class="qq-group">
+        混沌的 QQ 群：<strong>591719100</strong>
+    </div>
+
+    <a href="index.html" class="back-link">← 返回</a>
+</div>
 
 </body>
 </html>
