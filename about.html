@@ -108,7 +108,7 @@
             background: linear-gradient(90deg, transparent, rgba(212, 96, 106, 0.4), transparent);
         }
 
-        /* ======== 游戏作品：居中按钮 ======== */
+        /* ======== 游戏作品：标题 + 简介 ======== */
         .games-section {
             text-align: center;
             margin-bottom: 28px;
@@ -116,15 +116,16 @@
 
         .game-link {
             display: inline-block;
-            padding: 10px 24px;
+            padding: 14px 24px;
             background: rgba(20, 10, 20, 0.35);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(212, 96, 106, 0.2);
-            border-radius: 24px;
+            border-radius: 16px;
             color: #ddd;
             font-size: 0.9rem;
             transition: all 0.3s ease;
+            text-align: center;
         }
         .game-link:hover {
             color: #fff;
@@ -133,7 +134,22 @@
             transform: translateY(-2px);
         }
 
-        /* ======== 社交链接：居中 ======== */
+        .game-title {
+            display: block;
+            font-size: 0.95rem;
+            color: #eee;
+            margin-bottom: 4px;
+        }
+
+        .game-desc {
+            display: block;
+            font-size: 0.75rem;
+            color: #999;
+            line-height: 1.5;
+            max-width: 230px;
+        }
+
+        /* ======== 社交链接 ======== */
         .social-links {
             display: flex;
             flex-wrap: wrap;
@@ -191,7 +207,7 @@
         }
         .back-link:hover { color: #d4606a; }
 
-        /* ======== 响应式 ======== */
+        /* ======== 手机端适配 ======== */
         @media (max-width: 600px) {
             body { padding: 20px 12px; }
             .card {
@@ -204,6 +220,7 @@
             .avatar { margin-top: 0; }
             .divider { margin-left: auto; margin-right: auto; }
             .avatar { width: 80px; height: 80px; }
+            .game-desc { max-width: 260px; }
         }
     </style>
 </head>
@@ -218,14 +235,14 @@
             <h1 class="name">Shiro</h1>
             <div class="divider"></div>
             <p class="bio">
-                名叫shiro，有很多隐藏的其他称呼<br>
+                名叫shiro，也有很多其他称呼<br>
                 邪恶的恶魔，混沌黑暗混乱<br>
                 喜欢 Minecraft 机械动力，偶尔写点杂七杂八的东西<br>
                 时不时出点车万cos<br>
                 精通美图秀秀接白菜修图<br>
                 高贵的RX580使用者，垃圾佬<br>
                 晶化吧不知名吧友<br>
-                我现在很爱qwen<br>
+                deepseek重度依赖<br>
             </p>
         </div>
     </div>
@@ -234,7 +251,8 @@
     <div class="section-title">游 戏 作 品</div>
     <div class="games-section">
         <a class="game-link" href="games/landminexp/index.html" target="_blank">
-            LandmineXP
+            <span class="game-title">LandmineXP</span>
+            <span class="game-desc">给地雷妹扫雷，很辛苦吧。仅适配电脑端，建议全屏游玩。</span>
         </a>
     </div>
 
@@ -243,9 +261,7 @@
     <div class="social-links">
         <a class="social-link" href="https://space.bilibili.com/3546648888216061" target="_blank">B站</a>
         <a class="social-link" href="https://github.com/H2CO3w/H2CO3w" target="_blank">GitHub</a>
-        <a class="social-link" href="https://xhslink.cn/o/AsTsFeaEeQV" target="_blank">  小红书</a>
-        <a class="social-link" href="tw.html">Twitter</a>
-
+        <a class="social-link" href="tw.html" target="_blank">Twitter</a>
     </div>
 
     <!-- QQ群 -->
