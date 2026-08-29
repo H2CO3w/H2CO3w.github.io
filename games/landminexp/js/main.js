@@ -11,6 +11,7 @@
   const punishWin     = document.getElementById('punish');
   const cutBtn        = document.getElementById('cut-btn');
   const redOverlay    = document.getElementById('red-overlay');
+  const cgLock        = document.getElementById('cg-lock');
   const gameEl        = document.getElementById('game');
   const cv            = document.getElementById('board');
   const gameOverWin   = document.getElementById('gameover');
@@ -22,6 +23,34 @@
   let punishActive = false;
   let cutCount = 0;
   let punishTimer = null;
+  let cgTransitionTimer = null;
+  let cgLocked = false;
+
+  function clearCGTransitionTimer() {
+    if (cgTransitionTimer === null) return;
+    clearTimeout(cgTransitionTimer);
+    cgTransitionTimer = null;
+  }
+
+  function lockForCG() {
+    cgLocked = true;
+    resetBtn.disabled = true;
+    cgLock.classList.remove('hidden');
+  }
+
+  function unlockAfterCG() {
+    cgLocked = false;
+    resetBtn.disabled = false;
+    cgLock.classList.add('hidden');
+  }
+
+  function scheduleCG(callback, delay) {
+    clearCGTransitionTimer();
+    cgTransitionTimer = setTimeout(() => {
+      cgTransitionTimer = null;
+      callback();
+    }, delay);
+  }
 
   // ===== 渲染与 HUD =====
   function render() {
@@ -69,7 +98,7 @@
     GameData.addDark(15);
     UI.updateStress(GameData.getStress());
     UI.updateDark(GameData.getDark());
-    AudioSys.switchDown();
+    AudioSys.startFailureMusic();
 
     resetImg.style.display = 'none';
     resetVid.style.display = 'block';
@@ -83,7 +112,8 @@
     if (punishTimer) clearTimeout(punishTimer);
 
     if (GameData.getStress() >= CONFIG.STRESS_MAX) {
-      setTimeout(() => {
+      lockForCG();
+      scheduleCG(() => {
         failCG.classList.remove('hidden');
         CG.startFailCG();
       }, CONFIG.CG_DELAY);
@@ -118,19 +148,21 @@
 
     // 判断是否为最后一关（第14关）
     if (GameData.getCurrentLevel() === CONFIG.LEVELS.length - 1) {
-      AudioSys.stopAll();  // 关闭 BGM
+      AudioSys.stopAll();  // 最终关卡停止全部游戏音频
       winCG.classList.add('hidden');
 
       // 关闭所有可关闭窗口
       document.getElementById('compat').style.display = 'none';
       document.getElementById('calendar').style.display = 'none';
       document.getElementById('items').style.display = 'none';
+      document.getElementById('music').style.display = 'none';
 
       showGameOver();
       return;
     }
 
-    setTimeout(() => winCG.classList.remove('hidden'), 1000);
+    lockForCG();
+    scheduleCG(() => winCG.classList.remove('hidden'), 1000);
     updateHUD();
     render();
   }
@@ -159,7 +191,7 @@
     AudioSys.playClick();
     if (cutCount >= CONFIG.CUT_REQUIRED) {
       closePunishWindow();
-      AudioSys.switchUp();
+      AudioSys.stopFailureMusic();
       beginLevel();
     }
   }
@@ -168,12 +200,14 @@
   // ===== 关卡流程 =====
   function beginLevel() {
     if (punishTimer) clearTimeout(punishTimer);
+    clearCGTransitionTimer();
+    unlockAfterCG();
     stopTimer();
     CG.clearFailCG();
     closePunishWindow();
     failCG.classList.add('hidden');
     winCG.classList.add('hidden');
-    AudioSys.switchUp();
+    AudioSys.stopFailureMusic();
 
     resetImg.src = 'assets/images/normal.gif';
     resetImg.style.display = 'block';
@@ -241,7 +275,9 @@
   cv.addEventListener('contextmenu', e => e.preventDefault());
 
   // ===== 按钮事件 =====
-  resetBtn.addEventListener('click', beginLevel);
+  resetBtn.addEventListener('click', () => {
+    if (!cgLocked) beginLevel();
+  });
   document.getElementById('restart-fail').addEventListener('click', resetAfterCG);
   document.getElementById('restart-win').addEventListener('click', nextLevel);
 
@@ -256,6 +292,7 @@
 
   // ===== 初始化 =====
   UI.init();
+  MusicPlayer.init();
   UI.updateStress(GameData.getStress());
   UI.updateDark(GameData.getDark());
 
@@ -271,4 +308,3 @@
   beginLevel();
 
 })();
-

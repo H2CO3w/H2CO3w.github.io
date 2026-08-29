@@ -62,7 +62,9 @@ window.Items = (() => {
 
   // 返回是否处于暂停状态，内部递减
   function tickSmoke() {
-    return smokePause > 0 ? --smokePause : 0;
+    if (smokePause <= 0) return false;
+    smokePause--;
+    return true;
   }
 
   function reset() {

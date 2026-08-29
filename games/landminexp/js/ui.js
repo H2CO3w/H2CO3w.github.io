@@ -35,7 +35,8 @@ window.UI = (() => {
     const pos = {
       compat:   { x: gx + gw + 20, y: gy },
       calendar: { x: gx, y: gy + gh + 20 },
-      items:    { x: gx + gw + 20, y: gy + gh + 20 }
+      items:    { x: gx + gw + 20, y: gy + gh + 20 },
+      music:    { x: Math.max(90, gx - 340), y: gy }
     };
     if (pos[id]) {
       win.style.left = pos[id].x + 'px';
@@ -44,7 +45,7 @@ window.UI = (() => {
   }
 
   function init() {
-    ['game', 'compat', 'calendar', 'items', 'punish', 'gameover'].forEach(id => {
+    ['game', 'compat', 'calendar', 'items', 'music', 'punish', 'gameover'].forEach(id => {
       const el = document.getElementById(id);
       if (el) makeDraggable(el);
     });

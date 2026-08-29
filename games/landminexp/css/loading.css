@@ -12,9 +12,10 @@
   pointer-events: all;
 }
 #loading-screen.done {
-  opacity: 0;
-  pointer-events: none;
+opacity: 0;
+pointer-events: none;
 }
+#loading-screen.ready { cursor: pointer; }
 
 /* 进度条外框：纯色、无边框 */
 .loading-bar-bg {
@@ -33,10 +34,38 @@
 
 /* 进度条填充：纯色亮粉 */
 .loading-bar-fill {
-  width: 0%;
-  height: 100%;
-  background: #ff66b2;           /* 纯色，无渐变 */
-  transition: width 0.1s linear;
+width: 0%;
+height: 100%;
+background: #ff66b2;           /* 纯色，无渐变 */
+transition: width 0.1s linear;
+}
+
+.loading-hint {
+position: absolute;
+left: 50%;
+top: calc(78% + 34px);
+transform: translateX(-50%);
+color: #ff8fc7;
+font-family: Monaco, "Lucida Console", "Courier New", monospace;
+font-size: clamp(12px, 1.05vw, 16px);
+font-weight: 400;
+letter-spacing: 0.16em;
+white-space: nowrap;
+text-shadow:
+  1px 0 0 #7b164c,
+  0 1px 0 #7b164c,
+  2px 2px 0 #2a0e2e,
+  0 0 6px rgba(255, 102, 178, 0.75);
+animation: loading-hint-blink 2.4s ease-in-out infinite;
+}
+
+@keyframes loading-hint-blink {
+0%, 100% { opacity: 0.35; }
+50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+.loading-hint { animation: none; opacity: 1; }
 }
 
 

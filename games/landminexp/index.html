@@ -15,6 +15,7 @@
     <div class="loading-bar-bg" id="loading-bar">
       <div class="loading-bar-fill" id="loading-fill"></div>
     </div>
+    <div id="loading-hint" class="loading-hint hidden" aria-live="polite">CLICK TO START</div>
   </div>
 
   <!-- 桌面图标栏（竖排） -->
@@ -30,6 +31,10 @@
     <div class="desk-icon" data-target="items">
       <img src="assets/images/tool.png" alt="工具">
       <span>工具</span>
+    </div>
+    <div class="desk-icon" data-target="music">
+      <img src="assets/images/music.png" alt="音乐">
+      <span>音乐</span>
     </div>
   </div>
 
@@ -110,6 +115,44 @@
     </div>
   </div>
 
+  <!-- 音乐播放器窗口 -->
+  <div id="music" class="window" style="display:none;">
+    <div class="window-titlebar">
+      <span class="title-text">音乐播放器</span>
+      <button class="win-close" data-target="music">×</button>
+    </div>
+    <div class="window-body music-player">
+      <div class="music-now">
+        <img class="music-cover" src="assets/images/music.png" alt="">
+        <div class="music-screen">
+          <span id="music-status">PAUSED</span>
+          <strong id="music-title">UP</strong>
+        </div>
+      </div>
+
+      <select id="music-track-select" aria-label="选择曲目"></select>
+
+      <input id="music-progress" class="music-range" type="range"
+             min="0" max="0" value="0" step="0.1" aria-label="播放进度">
+      <div class="music-time">
+        <span id="music-current-time">00:00</span>
+        <span id="music-duration">00:00</span>
+      </div>
+
+      <div class="music-controls">
+        <button id="music-previous" type="button" title="上一首" aria-label="上一首">◀◀</button>
+        <button id="music-play" type="button" title="播放" aria-label="播放">▶</button>
+        <button id="music-next" type="button" title="下一首" aria-label="下一首">▶▶</button>
+      </div>
+
+      <label class="music-volume-row" for="music-volume">
+        <span>VOL</span>
+        <input id="music-volume" class="music-range" type="range"
+               min="0" max="100" value="70" step="1" aria-label="音乐音量">
+      </label>
+    </div>
+  </div>
+
   <!-- 惩罚窗口 -->
   <div id="punish" class="window">
     <div class="window-titlebar"><span class="title-text">割吧</span></div>
@@ -126,6 +169,9 @@
 
   <!-- 红色覆盖层 -->
   <div id="red-overlay"></div>
+
+  <!-- CG 出现前及播放期间阻止操作其他窗口 -->
+  <div id="cg-lock" class="hidden" aria-hidden="true"></div>
 
   <!-- 失败CG -->
   <div id="failCG" class="overlay hidden">
@@ -153,6 +199,7 @@
   <script src="js/config.js" defer></script>
   <script src="js/state.js" defer></script>
   <script src="js/audio.js" defer></script>
+  <script src="js/music.js" defer></script>
   <script src="js/ui.js" defer></script>
   <script src="js/render.js" defer></script>
   <script src="js/items.js" defer></script>

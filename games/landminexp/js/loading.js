@@ -2,9 +2,10 @@
   const screen = document.getElementById('loading-screen');
   const bar = document.getElementById('loading-bar');
   const fill = document.getElementById('loading-fill');
+  const hint = document.getElementById('loading-hint');
 
   const IMG_SRC = 'assets/images/loadingscreen.jpg';
-  const MIN_LOAD_MS = 8000;   // 总时长8秒
+  const MIN_LOAD_MS = 5000;   // 总时长5秒
   const STOP_AT = 0.98;       // 在98%处停住
 
   const img = new Image();
@@ -29,6 +30,8 @@
     bar.style.width = barW + 'px';
     bar.style.height = barH + 'px';
     bar.style.transform = 'translate(-50%, -50%)';
+    hint.style.left = cx + 'px';
+    hint.style.top = (cy + barH / 2 + 12) + 'px';
   }
 
   img.onload = positionBar;
@@ -47,6 +50,8 @@
   function continueLoad() {
     if (!waiting) return;
     waiting = false;
+    hint.classList.add('hidden');
+    screen.classList.remove('ready');
 
     AudioSys.playBoot();  // 播放开机音乐
 
@@ -65,6 +70,8 @@
       fill.style.width = Math.round(STOP_AT * 100) + '%';
       clearInterval(screen.__tick);
       waiting = true;                        // 等待点击
+      hint.classList.remove('hidden');
+      screen.classList.add('ready');
       return;
     }
     fill.style.width = Math.round(ratio * 100) + '%';
