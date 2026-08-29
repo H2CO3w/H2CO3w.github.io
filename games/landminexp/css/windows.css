@@ -237,17 +237,6 @@ canvas#board {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-#music-track-select {
-  width: 100%;
-  margin-bottom: 8px;
-  padding: 5px 6px;
-  border: 2px solid;
-  border-color: #c06c84 #fff0f5 #fff0f5 #c06c84;
-  background: #fff0f5;
-  color: #7a0040;
-  font: inherit;
-  font-size: 12px;
-}
 .music-range {
   width: 100%;
   accent-color: #ff4d9d;
