@@ -13,6 +13,14 @@ window.CONFIG = {
   PUNISH_DELAY: 800,
   CAL_MONTH: 6,
   CAL_DAYS: 30,
+  MUSIC_TRACKS: [
+    // 后续新增歌曲时，在此添加标题与音频路径即可。
+    { id: 'up', title: 'UP', src: 'assets/audio/up.mp3' },
+    { id: 'desktop-society', title: 'DESKTOP SOCIETY', src: 'assets/audio/desktop_society.mp3' },
+    { id: 'internet-overdose', title: 'INTERNET OVERDOSE', src: 'assets/audio/internet_overdose.mp3' },
+    { id: 'moon-rainbow-butterfly', title: 'MOON RAINBOW BUTTERFLY', src: 'assets/audio/moon_rainbow_butterfly.mp3' },
+    { id: 'stay-at-home', title: 'STAY AT HOME', src: 'assets/audio/stay_at_home.mp3' }
+  ],
   LEVELS: [
     // 第1关 - 第7关
     { rows: 9, cols: 9, mines: 6,  time: 240 },   // Lv1

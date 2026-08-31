@@ -188,5 +188,100 @@ canvas#board {
   text-align: left;
 }
 
+/* ===== 音乐播放器 ===== */
+#music { z-index: 5; width: 320px; }
+.music-player {
+  color: #7a0040;
+  font-family: Monaco, "Lucida Console", "Courier New", monospace;
+}
+.music-now {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+  margin-bottom: 10px;
+}
+.music-cover {
+  width: 68px;
+  height: 68px;
+  flex: 0 0 68px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  background: #ffb6d9;
+  border: 3px solid;
+  border-color: #c06c84 #fff0f5 #fff0f5 #c06c84;
+}
+.music-screen {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8px 10px;
+  overflow: hidden;
+  background: #210d24;
+  border: 3px solid;
+  border-color: #8b4860 #fff0f5 #fff0f5 #8b4860;
+  color: #ff8fc7;
+  text-shadow: 0 0 6px rgba(255, 102, 178, 0.8);
+}
+#music-status {
+  margin-bottom: 5px;
+  color: #d67aaa;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+#music-title {
+  overflow: hidden;
+  font-size: 18px;
+  letter-spacing: 0.08em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.music-range {
+  width: 100%;
+  accent-color: #ff4d9d;
+  cursor: pointer;
+}
+.music-range:disabled { cursor: not-allowed; opacity: 0.45; }
+.music-time {
+  display: flex;
+  justify-content: space-between;
+  margin: 1px 2px 8px;
+  font-size: 10px;
+}
+.music-controls {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.music-controls button {
+  min-width: 54px;
+  height: 36px;
+  padding: 4px 9px;
+  border: 3px solid;
+  border-color: #fff0f5 #c06c84 #c06c84 #fff0f5;
+  background: #ffb6d9;
+  color: #7a0040;
+  cursor: pointer;
+  font: bold 15px Monaco, "Lucida Console", "Courier New", monospace;
+}
+.music-controls button:active {
+  border-color: #c06c84 #fff0f5 #fff0f5 #c06c84;
+  transform: translate(1px, 1px);
+}
+.music-controls button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.music-volume-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px;
+  align-items: center;
+  font-size: 11px;
+  font-weight: bold;
+}
+
 /* ===== 方块 ===== */
 .cut-counter { margin-top: 10px; font-size: 18px; color: #b3004d; font-weight: bold; }

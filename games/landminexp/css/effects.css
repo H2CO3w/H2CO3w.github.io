@@ -6,15 +6,24 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  z-index: 100;
-  animation: fadeIn 0.35s ease;
+z-index: 1000;
+animation: fadeIn 0.35s ease;
 }
 #failCG {
-  background: radial-gradient(circle, rgba(255, 0, 100, 0.3), rgba(0, 0, 0, 0.92));
-  pointer-events: none;
+background: radial-gradient(circle, rgba(255, 0, 100, 0.3), rgba(0, 0, 0, 0.92));
+pointer-events: auto;
 }
 #failCG button { pointer-events: auto; }
 #winCG { background: radial-gradient(circle, rgba(255, 182, 193, 0.85), rgba(0, 0, 0, 0.9)); }
+
+/* CG 延迟出现及播放期间拦截其他窗口的输入 */
+#cg-lock {
+position: fixed;
+inset: 0;
+z-index: 999;
+background: transparent;
+cursor: wait;
+}
 .overlay h1 {
   color: #fff;
   font-size: 52px;
