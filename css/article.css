@@ -362,8 +362,8 @@ img {
 
 @media (max-width: 600px) {
     body {
-        font-size: 14.5px;
-        line-height: 1.8;
+        font-size: 16px;
+        line-height: 1.9;
     }
 
     .container {
@@ -371,19 +371,26 @@ img {
     }
 
     .article-title {
-        font-size: clamp(26px, 8vw, 34px);
+        font-size: clamp(28px, 8.5vw, 36px);
+    }
+
+    /* 小标签也要跟着抬，不然和正文落差太大 */
+    .back-link,
+    .article-meta,
+    .article-footer a {
+        font-size: 11px;
     }
 
     .article-content ul > li {
-        padding-left: 20px;
+        padding: 15px 0 15px 20px;
     }
 
     .article-content a[download] {
-        font-size: 13.5px;
+        font-size: 15px;
     }
 
     .article-content a[download]::after {
-        font-size: 8px;
+        font-size: 9px;
         letter-spacing: .1em;
     }
 }

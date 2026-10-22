@@ -1074,6 +1074,32 @@ body{
   .journal-inner::before,.journal-inner::after{display:none}
 }
 
+/* ============================================================
+   手机端可读性：把过小的字抬起来
+   放在最后 = 优先级最高，覆盖前面几块小值，不用去改旧代码
+   ============================================================ */
+@media (max-width:600px){
+  /* 主屏微字 */
+  .eyebrow    { font-size:11px; }
+  .lede       { font-size:12px; }
+  .hint       { font-size:11px; }
+  .owner,
+  .scroll-cue { font-size:10px; }
+
+  /* 简介与分类栏 */
+  .profile-name { font-size:30px; }
+  .profile-bio  { font-size:16px; line-height:1.85; }
+  .filters      { font-size:15px; }
+
+  /* 文章列表 */
+  .post-title  { font-size:26px; }
+  .post-date   { font-size:11px; }
+  .post-desc   { font-size:15px; line-height:1.75; }
+
+  /* 页脚 */
+  .journal-footer { font-size:12px; }
+}
+
 </style>
 </head>
 <body>
