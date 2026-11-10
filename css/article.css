@@ -340,6 +340,54 @@ img {
 }
 
 
+/* ---- 行内代码与代码块 ---- */
+.article-content code {
+    padding: .15em .38em;
+    border: 1px solid var(--jline);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, .045);
+    font-family: var(--mono);
+    font-size: .88em;
+    color: #f5d3e1;
+}
+
+.article-content pre {
+    margin: 1.8em 0;
+    padding: 16px 18px;
+    overflow-x: auto;
+    border: 1px solid var(--jline);
+    background: rgba(255, 255, 255, .035);
+}
+
+.article-content pre code {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    color: var(--jtext);
+    font-size: 13px;
+    line-height: 1.7;
+    white-space: pre;
+}
+
+/* ---- 配图与图注 ---- */
+.article-content figure {
+    margin: 2.2em 0;
+}
+
+.article-content figure img {
+    margin: 0;
+}
+
+.article-content figcaption {
+    margin-top: 10px;
+    font-family: var(--mono);
+    font-size: 10px;
+    line-height: 1.6;
+    letter-spacing: .08em;
+    color: var(--jdim);
+}
+
 /* ========== 5. 页脚 + 手机端 ========== */
 .article-footer {
     margin-top: clamp(56px, 9vh, 92px);
